@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_list_transactions"
+        android:icon="@drawable/ic_transactions"
+        android:title="Transações" />
+    <item
+        android:id="@+id/nav_add_transaction"
+        android:icon="@drawable/ic_add_transaction"
+        android:title="Adicionar" />
+    <item
+        android:id="@+id/nav_statistics"
+        android:icon="@drawable/ic_statistics"
+        android:title="Estatísticas" />
+    <item
+        android:id="@+id/nav_devs"
+        android:icon="@drawable/ic_devs"
+        android:title="Devs" />
+</menu>
