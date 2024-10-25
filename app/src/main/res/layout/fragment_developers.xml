@@ -1,39 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#2196F3"
-    android:gravity="center"
+    android:background="@color/background_light"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="20dp"
+    android:gravity="center"
     tools:context=".ui.DevelopersFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#B1B1B1"
+        android:layout_marginBottom="24dp"
+        android:elevation="8dp"
+        app:cardCornerRadius="16dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:strokeColor="#B1B1B1"
-        app:strokeWidth="4dp">
+        app:cardElevation="8dp"
+        app:strokeColor="@color/orange_medium"
+        app:strokeWidth="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/imgDev1"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginEnd="16dp"
+                android:src="@drawable/profile_neves"
+                android:contentDescription="@string/dev1_name"
                 android:background="@drawable/circle_background"
-                android:contentDescription="Foto do Desenvolvedor 1"
-                android:src="@drawable/profile_neves" />
+                android:scaleType="centerCrop"
+                android:layout_gravity="center"
+                android:clipToOutline="true"
+                android:outlineProvider="background"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -44,25 +50,31 @@
                     android:id="@+id/tvDev1Name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gabriel Neves Gomes"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:text="@string/dev1_name"
+                    android:textColor="@color/orange_dark"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
 
                 <TextView
                     android:id="@+id/tvDev1RM"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RM: 552244"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:text="@string/dev1_rm"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif"/>
 
                 <TextView
                     android:id="@+id/tvDev1Role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cargo: Desenvolvedor"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:text="@string/dev1_role"
+                    android:textColor="@color/orange_medium"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -70,27 +82,32 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#B1B1B1"
+        android:elevation="8dp"
+        app:cardCornerRadius="16dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:strokeColor="#B1B1B1"
-        app:strokeWidth="4dp">
+        app:cardElevation="8dp"
+        app:strokeColor="@color/orange_medium"
+        app:strokeWidth="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/imgDev2"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginEnd="16dp"
+                android:src="@drawable/profile_sampaio"
+                android:contentDescription="@string/dev2_name"
                 android:background="@drawable/circle_background"
-                android:contentDescription="Foto do Desenvolvedor 2"
-                android:src="@drawable/profile_sampaio" />
+                android:scaleType="centerCrop"
+                android:layout_gravity="center"
+                android:clipToOutline="true"
+                android:outlineProvider="background"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -101,25 +118,31 @@
                     android:id="@+id/tvDev2Name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gabriel Sampaio Gianini"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:text="@string/dev2_name"
+                    android:textColor="@color/orange_dark"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
 
                 <TextView
                     android:id="@+id/tvDev2RM"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RM: 552342"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:text="@string/dev2_rm"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif"/>
 
                 <TextView
                     android:id="@+id/tvDev2Role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cargo: Desenvolvedor"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:text="@string/dev2_role"
+                    android:textColor="@color/orange_medium"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

@@ -53,12 +53,26 @@ class TransactionListFragment : Fragment() {
     }
 
     fun deleteTransaction(transaction: Transaction) {
-        val result = dbHelper.deleteTransaction(transaction.id)
-        if (result > 0) {
-            Toast.makeText(requireContext(), "Transação deletada", Toast.LENGTH_SHORT).show()
-            loadTransactions()
-        } else {
-            Toast.makeText(requireContext(), "Erro ao deletar", Toast.LENGTH_SHORT).show()
+        val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Confirmação")
+        builder.setMessage("Você tem certeza que deseja deletar esta transação?")
+
+        builder.setPositiveButton("Sim") { dialog, _ ->
+            val result = dbHelper.deleteTransaction(transaction.id)
+            if (result > 0) {
+                Toast.makeText(requireContext(), "Transação deletada", Toast.LENGTH_SHORT).show()
+                loadTransactions()
+            } else {
+                Toast.makeText(requireContext(), "Erro ao deletar", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
         }
+
+        builder.setNegativeButton("Não") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }

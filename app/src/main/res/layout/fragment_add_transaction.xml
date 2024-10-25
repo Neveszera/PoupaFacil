@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2196F3"
+    android:background="@color/background_light"
     tools:context=".ui.AddTransactionFragment">
 
     <androidx.cardview.widget.CardView
@@ -14,7 +15,7 @@
         android:layout_margin="16dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
-        android:background="#B1B1B1"
+        android:background="@color/background_dark"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,49 +31,49 @@
                 android:id="@+id/etName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nome da Transação"
+                android:hint="@string/hint_transaction_name"
                 android:padding="12dp"
                 android:background="@drawable/rounded_input"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/darker_gray"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
                 android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/etAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Valor"
+                android:hint="@string/hint_transaction_amount"
                 android:inputType="numberDecimal"
                 android:layout_marginTop="12dp"
                 android:padding="12dp"
                 android:background="@drawable/rounded_input"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/darker_gray"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
                 android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/etDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Data"
-                android:inputType="number"
+                android:hint="@string/hint_transaction_date"
+                android:inputType="date"
                 android:layout_marginTop="12dp"
                 android:padding="12dp"
                 android:background="@drawable/rounded_input"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/darker_gray"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
                 android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/etCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Categoria"
+                android:hint="@string/hint_transaction_category"
                 android:layout_marginTop="12dp"
                 android:padding="12dp"
                 android:background="@drawable/rounded_input"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/darker_gray"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
                 android:textSize="16sp" />
 
             <RadioGroup
@@ -86,16 +87,16 @@
                     android:id="@+id/rbIncome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Receita"
-                    android:textColor="@android:color/black"
+                    android:text="@string/transaction_type_income"
+                    android:textColor="@color/text_primary"
                     android:textSize="16sp" />
 
                 <RadioButton
                     android:id="@+id/rbExpense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Despesa"
-                    android:textColor="@android:color/black"
+                    android:text="@string/transaction_type_expense"
+                    android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:layout_marginStart="20dp" />
             </RadioGroup>
@@ -107,10 +108,9 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/rounded_button"
                 android:padding="12dp"
-                android:text="Salvar Transação"
-                android:textColor="@android:color/white"
+                android:text="@string/btn_save_transaction"
+                android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

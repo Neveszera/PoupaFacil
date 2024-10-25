@@ -1,8 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.PoupaFacil" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/orange_dark</item>
+        <item name="colorPrimaryVariant">@color/orange_medium</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/orange_light</item>
+        <item name="colorOnSecondary">@color/white</item>
 
+        <!-- Estilo do botão -->
+        <item name="buttonStyle">@style/MyButtonStyle</item>
     </style>
 
     <style name="Theme.PoupaFacil" parent="Base.Theme.PoupaFacil" />
+
+    <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/rounded_button</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

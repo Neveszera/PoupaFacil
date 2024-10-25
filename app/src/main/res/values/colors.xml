@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="background_blue">#4285F4</color>
+        <!-- Tons de Laranja -->
+        <color name="orange_dark">#FF6F20</color> <!-- Laranja Escuro -->
+        <color name="orange_medium">#FFA726</color> <!-- Laranja Médio -->
+        <color name="orange_light">#FFB74D</color> <!-- Laranja Claro -->
+
+        <!-- Branco -->
+        <color name="white">#FFFFFF</color> <!-- Branco -->
+
+        <!-- Preto -->
+        <color name="black">#000000</color> <!-- Branco -->
+
+        <!-- Cores de Texto -->
+        <color name="text_primary">#212121</color> <!-- Texto Primário (Preto) -->
+        <color name="text_secondary">#757575</color> <!-- Texto Secundário (Cinza) -->
+        <color name="text_accent">#FF6F20</color> <!-- Texto de Destaque (Laranja Escuro) -->
+
+        <!-- Cores de Fundo -->
+        <color name="background_light">#F5F5F5</color> <!-- Fundo Claro -->
+        <color name="background_dark">#FFFFFF</color> <!-- Fundo Branco -->
+
+        <!-- Cores de Sucesso e Erro -->
+        <color name="success_color">#4CAF50</color> <!-- Verde para Sucesso -->
+        <color name="error_color">#F44336</color> <!-- Vermelho para Erro -->
 </resources>

@@ -12,17 +12,17 @@ import com.example.poupafacil.data.DatabaseHelper
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.formatter.ValueFormatter
+import java.util.*
 
 class StatisticsFragment : Fragment() {
 
@@ -56,8 +56,8 @@ class StatisticsFragment : Fragment() {
         val totalIncome = dbHelper.getTotalIncome()
         val totalExpenses = dbHelper.getTotalExpenses()
 
-        tvTotalIncome.text = "Total Receitas: R$ $totalIncome"
-        tvTotalExpenses.text = "Total Despesas: R$ $totalExpenses"
+        tvTotalIncome.text = "Total Receitas: R$ ${String.format("%,.2f", totalIncome)}"
+        tvTotalExpenses.text = "Total Despesas: R$ ${String.format("%,.2f", totalExpenses)}"
 
         setupBarChart(totalIncome, totalExpenses)
         setupPieChartIncomeByCategory()
@@ -69,13 +69,14 @@ class StatisticsFragment : Fragment() {
         entries.add(BarEntry(0f, income.toFloat()))
         entries.add(BarEntry(1f, expenses.toFloat()))
 
-        val incomeDataSet = BarDataSet(listOf(BarEntry(0f, income.toFloat())), "Receitas")
-        incomeDataSet.color = Color.GREEN
+        val dataSet = BarDataSet(entries, "")
 
-        val expenseDataSet = BarDataSet(listOf(BarEntry(1f, expenses.toFloat())), "Despesas")
-        expenseDataSet.color = Color.RED
+        dataSet.colors = listOf(
+            Color.parseColor("#4CAF50"),
+            Color.parseColor("#F44336")
+        )
 
-        val data = BarData(incomeDataSet, expenseDataSet)
+        val data = BarData(dataSet)
         barChartRevenueVsExpense.data = data
 
         barChartRevenueVsExpense.description = Description().apply {
@@ -89,20 +90,7 @@ class StatisticsFragment : Fragment() {
 
         barChartRevenueVsExpense.axisRight.isEnabled = false
 
-        barChartRevenueVsExpense.xAxis.apply {
-            position = XAxis.XAxisPosition.BOTTOM
-            textColor = Color.BLACK
-            valueFormatter = object : ValueFormatter() {
-                override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                    return when (value.toInt()) {
-                        0 -> "Receitas"
-                        1 -> "Despesas"
-                        else -> ""
-                    }
-                }
-            }
-        }
-
+        barChartRevenueVsExpense.legend.isEnabled = false
         barChartRevenueVsExpense.invalidate()
     }
 
@@ -110,8 +98,10 @@ class StatisticsFragment : Fragment() {
         val categories = dbHelper.getIncomeByCategory()
         val entries = categories.map { PieEntry(it.value.toFloat(), it.key) }
 
+        val colors = getColorList(entries.size)
+
         val pieDataSet = PieDataSet(entries, "Receitas por Categoria")
-        pieDataSet.colors = listOf(Color.BLUE, Color.CYAN, Color.MAGENTA)
+        pieDataSet.colors = colors
         pieDataSet.valueTextColor = Color.BLACK
         pieDataSet.valueTextSize = 12f
 
@@ -124,8 +114,8 @@ class StatisticsFragment : Fragment() {
         }
 
         pieChartIncomeByCategory.legend.apply {
-            verticalAlignment = Legend.LegendVerticalAlignment.TOP
-            horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
             orientation = Legend.LegendOrientation.VERTICAL
             textColor = Color.BLACK
         }
@@ -137,8 +127,10 @@ class StatisticsFragment : Fragment() {
         val categories = dbHelper.getExpensesByCategory()
         val entries = categories.map { PieEntry(it.value.toFloat(), it.key) }
 
+        val colors = getColorList(entries.size)
+
         val pieDataSet = PieDataSet(entries, "Despesas por Categoria")
-        pieDataSet.colors = listOf(Color.RED, Color.YELLOW, Color.GREEN)
+        pieDataSet.colors = colors
         pieDataSet.valueTextColor = Color.BLACK
         pieDataSet.valueTextSize = 12f
 
@@ -151,12 +143,23 @@ class StatisticsFragment : Fragment() {
         }
 
         pieChartExpenseByCategory.legend.apply {
-            verticalAlignment = Legend.LegendVerticalAlignment.TOP
-            horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
             orientation = Legend.LegendOrientation.VERTICAL
             textColor = Color.BLACK
         }
 
         pieChartExpenseByCategory.invalidate()
+    }
+
+    private fun getColorList(size: Int): List<Int> {
+        val colors = mutableListOf<Int>()
+        val random = Random()
+
+        for (i in 0 until size) {
+            colors.add(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)))
+        }
+
+        return colors
     }
 }

@@ -1,3 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PoupaFacil</string>
+    <!-- Nome do aplicativo -->
+    <string name="app_name">Poupa Fácil</string>
+
+    <!-- Strings para card de transação -->
+    <string name="card_transaction_name">Nome da Transação</string>
+    <string name="card_edit_description">Editar</string>
+    <string name="card_delete_description">Deletar</string>
+    <string name="card_transaction_amount">R$ 120,00</string>
+    <string name="card_transaction_date">10 de Outubro, 2024</string>
+    <string name="card_transaction_category">Alimentação</string>
+
+    <!-- Strings para a tela de adicionar transação -->
+    <string name="transaction_title">Adicionar Transação</string>
+    <string name="hint_transaction_name">Nome da Transação</string>
+    <string name="hint_transaction_amount">Valor</string>
+    <string name="hint_transaction_date">Data</string>
+    <string name="hint_transaction_category">Categoria</string>
+    <string name="transaction_type_income">Receita</string>
+    <string name="transaction_type_expense">Despesa</string>
+    <string name="btn_save_transaction">Salvar Transação</string>
+
+    <!-- Strings para a Tela de Editar Transação -->
+    <string name="edit_transaction_name_hint">Nome da Transação</string>
+    <string name="edit_transaction_amount_hint">Valor</string>
+    <string name="edit_transaction_date_hint">Data</string>
+    <string name="edit_transaction_category_hint">Categoria</string>
+    <string name="edit_transaction_income">Receita</string>
+    <string name="edit_transaction_expense">Despesa</string>
+    <string name="edit_transaction_button">Editar Transação</string>
+
+    <!-- Strings para a Tela de Estatísticas -->
+    <string name="statistics_title">Estatísticas</string>
+    <string name="statistics_total_income">Total Receitas: R$ %1$.2f</string>
+    <string name="statistics_total_expenses">Total Despesas: R$ %1$.2f</string>
+    <string name="statistics_revenue_vs_expense">Receitas x Despesas</string>
+    <string name="statistics_income_by_category">Receitas por Categoria</string>
+    <string name="statistics_expense_by_category">Despesas por Categoria</string>
+
+    <!-- Strings para a tela de desenvolvedores -->
+    <string name="developers_title">Desenvolvedores</string>
+    <string name="dev1_name">Gabriel Neves Gomes</string>
+    <string name="dev1_rm">RM: 552244</string>
+    <string name="dev1_role">Cargo: Desenvolvedor</string>
+    <string name="dev2_name">Gabriel Sampaio Gianini</string>
+    <string name="dev2_rm">RM: 552342</string>
+    <string name="dev2_role">Cargo: Desenvolvedor</string>
+
+    <!-- Strings para itens do menu -->
+    <string name="nav_transactions">Transações</string>
+    <string name="nav_add_transaction">Adicionar</string>
+    <string name="nav_statistics">Estatísticas</string>
+    <string name="nav_devs">Devs</string>
 </resources>

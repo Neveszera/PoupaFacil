@@ -1,51 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/background_light">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#2196F3"
-        android:padding="16dp"
-        android:layout_marginBottom="20dp">
+        android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Estatísticas"
-            android:textColor="@android:color/white"
+            android:text="@string/statistics_title"
+            android:textColor="@color/text_accent"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/tvTotalIncome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Total Receitas: R$ 0.00"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:text="@string/statistics_total_income"
+            android:textColor="@color/success_color"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvTotalExpenses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Total Despesas: R$ 0.00"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:text="@string/statistics_total_expenses"
+            android:textColor="@color/error_color"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@android:color/white"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,7 +55,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Receitas x Despesas"
+                    android:text="@string/statistics_revenue_vs_expense"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -67,14 +66,13 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Gráfico de Receitas por Categoria -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@android:color/white"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,7 +83,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Receitas por Categoria"
+                    android:text="@string/statistics_income_by_category"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -96,14 +94,13 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Gráfico de Despesas por Categoria -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@android:color/white"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,7 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Despesas por Categoria"
+                    android:text="@string/statistics_expense_by_category"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -124,6 +121,10 @@
                     android:layout_height="300dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
 
     </LinearLayout>
 </ScrollView>

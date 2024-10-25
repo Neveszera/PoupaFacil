@@ -1,3 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Tema Claro -->
+    <style name="AppTheme.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/orange_dark</item>
+        <item name="colorPrimaryVariant">@color/orange_medium</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/orange_light</item>
+        <item name="colorSecondaryVariant">@color/orange_medium</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:colorBackground">@color/background_light</item>
+
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+
+        <item name="android:colorAccent">@color/text_accent</item>
+
+        <item name="android:buttonStyle">@style/Widget.MaterialComponents.Button</item>
+        <item name="android:colorControlNormal">@color/text_secondary</item>
+        <item name="android:colorControlActivated">@color/text_accent</item>
+        <item name="android:colorControlHighlight">@color/orange_light</item>
+
+    </style>
+
 </resources>
+
