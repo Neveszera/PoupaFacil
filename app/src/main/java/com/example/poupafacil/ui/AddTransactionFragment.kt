@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.poupafacil.data.DatabaseHelper
+import com.example.poupafacil.data.FirestoreHelper
 import com.example.poupafacil.data.Transaction
 import com.example.poupafacil.databinding.FragmentAddTransactionBinding
 import java.text.NumberFormat
@@ -21,7 +21,7 @@ class AddTransactionFragment : Fragment() {
 
     private var _binding: FragmentAddTransactionBinding? = null
     private val binding get() = _binding!!
-    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var firestoreHelper: FirestoreHelper
     private var isUpdating = false
     private val localeBR = Locale("pt", "BR")
     private val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance(localeBR)
@@ -36,7 +36,7 @@ class AddTransactionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dbHelper = DatabaseHelper(requireContext())
+        firestoreHelper = FirestoreHelper()
 
         setupAmountFormatting()
         setupDateFormatting()
@@ -46,9 +46,7 @@ class AddTransactionFragment : Fragment() {
             if (validateInputs()) {
                 val name = binding.etName.text.toString()
                 val amountString = binding.etAmount.text.toString()
-
                 val amount = parseCurrencyToDouble(amountString)
-
                 val date = binding.etDate.text.toString()
                 val category = binding.etCategory.text.toString()
                 val type = if (binding.rbIncome.isChecked) "Receita" else "Despesa"
@@ -62,8 +60,16 @@ class AddTransactionFragment : Fragment() {
                         type = type
                     )
 
-                    dbHelper.insertTransaction(transaction)
-                    requireActivity().supportFragmentManager.popBackStack()
+                    // Passando a transação para o método de inserção
+                    firestoreHelper.insertTransaction(transaction,
+                        onSuccess = { transactionWithId ->
+                            // Agora a transação tem o ID atribuído corretamente
+                            Toast.makeText(requireContext(), "Transação adicionada com sucesso!", Toast.LENGTH_SHORT).show()
+                            requireActivity().supportFragmentManager.popBackStack()
+                        },
+                        onFailure = { exception ->
+                            Toast.makeText(requireContext(), "Erro ao adicionar transação: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        })
                 } else {
                     binding.etAmount.error = "Insira um valor válido"
                 }
@@ -139,6 +145,7 @@ class AddTransactionFragment : Fragment() {
     }
 
     private fun setupInputValidation() {
+        // You can add any additional setup for input validations here if needed.
     }
 
     private fun validateInputs(): Boolean {
@@ -190,5 +197,3 @@ class AddTransactionFragment : Fragment() {
         _binding = null
     }
 }
-
-

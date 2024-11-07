@@ -6,14 +6,10 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import com.example.poupafacil.R
-import com.example.poupafacil.data.DatabaseHelper
+import com.example.poupafacil.data.FirestoreHelper
 import com.example.poupafacil.data.Transaction
 import java.text.NumberFormat
 import java.text.ParseException
@@ -30,20 +26,20 @@ class EditTransactionFragment : Fragment() {
     private lateinit var rbIncome: RadioButton
     private lateinit var rbExpense: RadioButton
     private lateinit var btnEdit: Button
-    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var dbHelper: FirestoreHelper
     private var isUpdating = false
     private val localeBR = Locale("pt", "BR")
     private val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance(localeBR)
 
-    private var transactionId: Int = -1
+    private var transactionId: String? = null
 
     companion object {
         private const val ARG_TRANSACTION_ID = "transaction_id"
 
-        fun newInstance(transactionId: Int): EditTransactionFragment {
+        fun newInstance(transactionId: String): EditTransactionFragment {
             val fragment = EditTransactionFragment()
             val args = Bundle()
-            args.putInt(ARG_TRANSACTION_ID, transactionId)
+            args.putString(ARG_TRANSACTION_ID, transactionId)
             fragment.arguments = args
             return fragment
         }
@@ -64,13 +60,13 @@ class EditTransactionFragment : Fragment() {
         rbExpense = view.findViewById(R.id.rbExpense)
         btnEdit = view.findViewById(R.id.btnEdit)
 
-        dbHelper = DatabaseHelper(requireContext())
+        dbHelper = FirestoreHelper()
 
         val bundle = arguments
         if (bundle != null) {
-            transactionId = bundle.getInt(ARG_TRANSACTION_ID, -1)
-            if (transactionId != -1) {
-                loadTransactionDetails(transactionId)
+            transactionId = bundle.getString(ARG_TRANSACTION_ID)
+            if (transactionId != null) {
+                loadTransactionDetails(transactionId!!)
             }
         }
 
@@ -84,23 +80,29 @@ class EditTransactionFragment : Fragment() {
         return view
     }
 
-    private fun loadTransactionDetails(transactionId: Int) {
-        val transaction = dbHelper.getTransactionById(transactionId)
-        if (transaction != null) {
-            etName.setText(transaction.name)
-            etAmount.setText(currencyFormatter.format(transaction.amount))
-            etDate.setText(transaction.date)
-            etCategory.setText(transaction.category)
+    private fun loadTransactionDetails(transactionId: String) {
+        dbHelper.getTransactionById(transactionId,
+            onSuccess = { transaction ->
+                if (transaction != null) {
+                    etName.setText(transaction.name)
+                    etAmount.setText(currencyFormatter.format(transaction.amount))
+                    etDate.setText(transaction.date)
+                    etCategory.setText(transaction.category)
 
-            if (transaction.type == "Receita") {
-                rbIncome.isChecked = true
-            } else {
-                rbExpense.isChecked = true
+                    if (transaction.type == "Receita") {
+                        rbIncome.isChecked = true
+                    } else {
+                        rbExpense.isChecked = true
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Transação não encontrada", Toast.LENGTH_SHORT).show()
+                    btnEdit.isEnabled = false
+                }
+            },
+            onFailure = {
+                Toast.makeText(requireContext(), "Erro ao carregar transação", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            Toast.makeText(requireContext(), "Transação não encontrada", Toast.LENGTH_SHORT).show()
-            btnEdit.isEnabled = false
-        }
+        )
     }
 
     private fun setupAmountFormatting() {
@@ -179,7 +181,7 @@ class EditTransactionFragment : Fragment() {
         }
 
         val transaction = Transaction(
-            id = transactionId,
+            id = transactionId ?: "",
             name = name,
             amount = amount,
             date = date,
@@ -187,13 +189,15 @@ class EditTransactionFragment : Fragment() {
             type = type
         )
 
-        val success = dbHelper.updateTransaction(transaction) > 0
-        if (success) {
-            Toast.makeText(requireContext(), "Transação atualizada com sucesso", Toast.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
-        } else {
-            Toast.makeText(requireContext(), "Erro ao atualizar transação", Toast.LENGTH_SHORT).show()
-        }
+        dbHelper.updateTransaction(transaction,
+            onSuccess = {
+                Toast.makeText(requireContext(), "Transação atualizada com sucesso", Toast.LENGTH_SHORT).show()
+                requireActivity().supportFragmentManager.popBackStack()
+            },
+            onFailure = {
+                Toast.makeText(requireContext(), "Erro ao atualizar transação", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     private fun isValidDate(date: String): Boolean {

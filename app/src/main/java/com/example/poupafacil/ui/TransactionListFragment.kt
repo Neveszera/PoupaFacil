@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.poupafacil.R
 import com.example.poupafacil.adapter.TransactionAdapter
-import com.example.poupafacil.data.DatabaseHelper
+import com.example.poupafacil.data.FirestoreHelper
 import com.example.poupafacil.data.Transaction
 
 class TransactionListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var transactionAdapter: TransactionAdapter
-    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var dbHelper: FirestoreHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,20 +28,27 @@ class TransactionListFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerViewTransactions)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        dbHelper = DatabaseHelper(requireContext())
+        dbHelper = FirestoreHelper()
+
         loadTransactions()
 
         return view
     }
 
     private fun loadTransactions() {
-        val transactions: List<Transaction> = dbHelper.getAllTransactions()
-        transactionAdapter = TransactionAdapter(transactions, { transaction ->
-            navigateToEditTransaction(transaction)
-        }, { transaction ->
-            deleteTransaction(transaction)
-        })
-        recyclerView.adapter = transactionAdapter
+        dbHelper.getAllTransactions(
+            onSuccess = { transactions ->
+                transactionAdapter = TransactionAdapter(transactions, { transaction ->
+                    navigateToEditTransaction(transaction)
+                }, { transaction ->
+                    deleteTransaction(transaction)
+                })
+                recyclerView.adapter = transactionAdapter
+            },
+            onFailure = { exception ->
+                Toast.makeText(requireContext(), "Erro ao carregar transações: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     fun navigateToEditTransaction(transaction: Transaction) {
@@ -58,19 +65,25 @@ class TransactionListFragment : Fragment() {
         builder.setMessage("Você tem certeza que deseja deletar esta transação?")
 
         builder.setPositiveButton("Sim") { dialog, _ ->
-            val result = dbHelper.deleteTransaction(transaction.id)
-            if (result > 0) {
-                Toast.makeText(requireContext(), "Transação deletada", Toast.LENGTH_SHORT).show()
-                loadTransactions()
+            val transactionId = transaction.id
+            if (!transactionId.isNullOrEmpty()) {
+                dbHelper.deleteTransaction(transactionId,
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "Transação deletada", Toast.LENGTH_SHORT).show()
+                        loadTransactions()
+                    },
+                    onFailure = { exception ->
+                        Toast.makeText(requireContext(), "Erro ao deletar transação: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+                )
             } else {
-                Toast.makeText(requireContext(), "Erro ao deletar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "ID da transação não encontrado", Toast.LENGTH_SHORT).show()
             }
+
             dialog.dismiss()
         }
 
-        builder.setNegativeButton("Não") { dialog, _ ->
-            dialog.dismiss()
-        }
+        builder.setNegativeButton("Não") { dialog, _ -> dialog.dismiss() }
 
         val dialog = builder.create()
         dialog.show()

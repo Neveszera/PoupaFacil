@@ -8,25 +8,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.poupafacil.R
-import com.example.poupafacil.data.DatabaseHelper
+import com.example.poupafacil.data.FirestoreHelper
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.ValueFormatter
 import java.util.*
 
 class StatisticsFragment : Fragment() {
 
-    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var dbHelper: FirestoreHelper
     private lateinit var barChartRevenueVsExpense: BarChart
     private lateinit var pieChartIncomeByCategory: PieChart
     private lateinit var pieChartExpenseByCategory: PieChart
@@ -45,7 +42,7 @@ class StatisticsFragment : Fragment() {
         tvTotalIncome = view.findViewById(R.id.tvTotalIncome)
         tvTotalExpenses = view.findViewById(R.id.tvTotalExpenses)
 
-        dbHelper = DatabaseHelper(requireContext())
+        dbHelper = FirestoreHelper()
 
         loadStatistics()
 
@@ -53,103 +50,95 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun loadStatistics() {
-        val totalIncome = dbHelper.getTotalIncome()
-        val totalExpenses = dbHelper.getTotalExpenses()
+        dbHelper.getTotalExpenses(onSuccess = { totalExpenses ->
+            tvTotalExpenses.text = "Total Despesas: R$ ${String.format("%,.2f", totalExpenses)}"
+            dbHelper.getTotalIncome(onSuccess = { totalIncome ->
+                tvTotalIncome.text = "Total Receitas: R$ ${String.format("%,.2f", totalIncome)}"
+                setupBarChart(totalIncome, totalExpenses)
+            }, onFailure = { exception -> handleError(exception) })
+        }, onFailure = { exception -> handleError(exception) })
 
-        tvTotalIncome.text = "Total Receitas: R$ ${String.format("%,.2f", totalIncome)}"
-        tvTotalExpenses.text = "Total Despesas: R$ ${String.format("%,.2f", totalExpenses)}"
-
-        setupBarChart(totalIncome, totalExpenses)
         setupPieChartIncomeByCategory()
         setupPieChartExpenseByCategory()
     }
 
     private fun setupBarChart(income: Double, expenses: Double) {
-        val entries = ArrayList<BarEntry>()
-        entries.add(BarEntry(0f, income.toFloat()))
-        entries.add(BarEntry(1f, expenses.toFloat()))
-
-        val dataSet = BarDataSet(entries, "")
-
-        dataSet.colors = listOf(
-            Color.parseColor("#4CAF50"),
-            Color.parseColor("#F44336")
+        val entries = arrayListOf(
+            BarEntry(0f, income.toFloat()),
+            BarEntry(1f, expenses.toFloat())
         )
 
-        val data = BarData(dataSet)
-        barChartRevenueVsExpense.data = data
-
-        barChartRevenueVsExpense.description = Description().apply {
-            text = "Comparação de Receitas e Despesas"
-            textColor = Color.BLACK
+        val dataSet = BarDataSet(entries, "").apply {
+            colors = listOf(Color.parseColor("#4CAF50"), Color.parseColor("#F44336"))
         }
 
-        barChartRevenueVsExpense.axisLeft.apply {
-            textColor = Color.BLACK
+        barChartRevenueVsExpense.apply {
+            data = BarData(dataSet)
+            description = Description().apply {
+                text = "Comparação de Receitas e Despesas"
+                textColor = Color.BLACK
+            }
+            axisLeft.textColor = Color.BLACK
+            axisRight.isEnabled = false
+            legend.isEnabled = false
+            invalidate()
         }
-
-        barChartRevenueVsExpense.axisRight.isEnabled = false
-
-        barChartRevenueVsExpense.legend.isEnabled = false
-        barChartRevenueVsExpense.invalidate()
     }
 
     private fun setupPieChartIncomeByCategory() {
-        val categories = dbHelper.getIncomeByCategory()
-        val entries = categories.map { PieEntry(it.value.toFloat(), it.key) }
+        dbHelper.getIncomeByCategory(onSuccess = { categories ->
+            val entries = categories.map { PieEntry(it.value.toFloat(), it.key) }
+            val colors = getColorList(entries.size)
 
-        val colors = getColorList(entries.size)
+            val pieDataSet = PieDataSet(entries, "Receitas por Categoria").apply {
+                this.colors = colors
+                valueTextColor = Color.BLACK
+                valueTextSize = 12f
+            }
 
-        val pieDataSet = PieDataSet(entries, "Receitas por Categoria")
-        pieDataSet.colors = colors
-        pieDataSet.valueTextColor = Color.BLACK
-        pieDataSet.valueTextSize = 12f
-
-        val pieData = PieData(pieDataSet)
-        pieChartIncomeByCategory.data = pieData
-
-        pieChartIncomeByCategory.description = Description().apply {
-            text = "Distribuição de Receitas"
-            textColor = Color.BLACK
-        }
-
-        pieChartIncomeByCategory.legend.apply {
-            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-            orientation = Legend.LegendOrientation.VERTICAL
-            textColor = Color.BLACK
-        }
-
-        pieChartIncomeByCategory.invalidate()
+            pieChartIncomeByCategory.apply {
+                data = PieData(pieDataSet)
+                description = Description().apply {
+                    text = "Distribuição de Receitas"
+                    textColor = Color.BLACK
+                }
+                legend.apply {
+                    verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                    horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+                    orientation = Legend.LegendOrientation.VERTICAL
+                    textColor = Color.BLACK
+                }
+                invalidate()
+            }
+        }, onFailure = { exception -> handleError(exception) })
     }
 
     private fun setupPieChartExpenseByCategory() {
-        val categories = dbHelper.getExpensesByCategory()
-        val entries = categories.map { PieEntry(it.value.toFloat(), it.key) }
+        dbHelper.getExpensesByCategory(onSuccess = { categories ->
+            val entries = categories.map { PieEntry(it.value.toFloat(), it.key) }
+            val colors = getColorList(entries.size)
 
-        val colors = getColorList(entries.size)
+            val pieDataSet = PieDataSet(entries, "Despesas por Categoria").apply {
+                this.colors = colors
+                valueTextColor = Color.BLACK
+                valueTextSize = 12f
+            }
 
-        val pieDataSet = PieDataSet(entries, "Despesas por Categoria")
-        pieDataSet.colors = colors
-        pieDataSet.valueTextColor = Color.BLACK
-        pieDataSet.valueTextSize = 12f
-
-        val pieData = PieData(pieDataSet)
-        pieChartExpenseByCategory.data = pieData
-
-        pieChartExpenseByCategory.description = Description().apply {
-            text = "Distribuição de Despesas"
-            textColor = Color.BLACK
-        }
-
-        pieChartExpenseByCategory.legend.apply {
-            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-            orientation = Legend.LegendOrientation.VERTICAL
-            textColor = Color.BLACK
-        }
-
-        pieChartExpenseByCategory.invalidate()
+            pieChartExpenseByCategory.apply {
+                data = PieData(pieDataSet)
+                description = Description().apply {
+                    text = "Distribuição de Despesas"
+                    textColor = Color.BLACK
+                }
+                legend.apply {
+                    verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                    horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+                    orientation = Legend.LegendOrientation.VERTICAL
+                    textColor = Color.BLACK
+                }
+                invalidate()
+            }
+        }, onFailure = { exception -> handleError(exception) })
     }
 
     private fun getColorList(size: Int): List<Int> {
@@ -161,5 +150,9 @@ class StatisticsFragment : Fragment() {
         }
 
         return colors
+    }
+
+    private fun handleError(exception: Exception) {
+        // Handle error (e.g., show a toast or log the error)
     }
 }
