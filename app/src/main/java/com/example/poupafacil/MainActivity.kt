@@ -9,13 +9,16 @@ import com.example.poupafacil.ui.DevelopersFragment
 import com.example.poupafacil.ui.StatisticsFragment
 import com.example.poupafacil.ui.TransactionListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setTheme(R.style.AppTheme_Light);
+        setTheme(R.style.AppTheme_Light)
+
+        FirebaseApp.initializeApp(this)
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
